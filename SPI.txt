@@ -1,0 +1,178 @@
+                                      
+
+
+
+
+
+                                           SPI (Serial Peripherial Interface)
+ 
+                                                            By
+                                                        Motorola
+
+
+
+. SPI is a four wire protocol while I^2C was two wire protocol
+  
+
+  SCK  - serial clock / shift clock.
+  MOSI - Master output slave input.   
+  MISO - Master input slave output.
+  SS   - slave select.
+ 
+ 
+                  Master                                      Slave
+
+
+                  MOSI __________________>____________________ MISI
+                  MISO __________________<____________________ MOSO
+                         _   _
+                  SCK  _| |_| |_______________________________ SCK
+                  SS   _______________________________________ SS
+
+
+. SPI is a full duplex protocol while I^2C was half duplex 
+. Master and Slave operation is supported by SPI while I2C support master , multi-master and slave mode of communication.
+. For a fixed crystal oscillater value FCPU SPI support saven programmable bit rate , while I^2C support a range of bit rate 
+  from 100 KHz to 400 kHz.
+. SPI is faster then I2C, speed of SPI is in Mbps while for I^2C in Kbps.
+. option to transfer either LSB first or MSB first while their was no such option in I^2C.
+
+
+
+
+**********************************************************************************************************************
+
+                              REGISTER used in SPI
+
+1 SPDR register = SPI data register.
+2 SPSR register = SPI status register.
+3 SPCR register = SPI control register.
+
+**********************************************************************************************************************
+
+
+SPSR register
+
+
+SPSR = SPIF | WCOL | - | - | - | - | - | SPI2X |
+
+
+SPIF = SPI interrupt flag bit 
+
+     = 0 SPI SPI transfer or recption is continue
+     = 1 SPI operation is finished 
+        
+       we can transmit / recived the next / byte as SPDR is free
+
+
+WCOL = write collision flag bit 
+
+     = 0 normal bit rate
+     = 1 double bite rate
+       = 2 X normal bit rate.
+
+**********************************************************************************************************************
+
+
+
+SPCR Register
+ 
+
+
+SPCR = SPIE | SPE | DORD | MSTR | CPOL | CPHA | SPR1 | SPR0 | 
+        r/w   r/w   r/w    r/w     r/w    r/w     r/w   r/w
+         0      0      0     0       0      0       0      0
+
+
+
+
+SPIE = Interrupt Enable.
+     = 1 for enable interrupt.
+     = 0 for disable interrupt.
+
+SPE  = SPI enable bit.
+     = 1 enable SPI.
+     = 0 disable SPI.
+
+DORD = Data order select bit 
+     = 1 transfer/recive . LSB first.
+     = 0 transfer/recive . MSB first.
+
+MSTR = Master slave select bit.
+     = 1 Master mode.
+     = 0 slave mode
+
+CPOL clock polarity CPHA clock phase } no need to learn
+
+
+SPR1 , SPR0 = SPI Prescaler bit.
+
+
+             SPI2x       SPR1      SPR0    Prescale value
+                
+                0           0         0     /4
+               
+                0           0         1     /16
+
+                0           1         0     /64
+
+                0           1         1     /128
+                
+                1           0         0     /2
+
+                1           0         1     /8
+
+                1           1         0     /32
+ 
+                1           1         1     /64
+
+
+**************************************************************************************************************
+
+
+
+SPDR register
+  
+
+
+ SPDR = MSB | - | - | - | - | - | - | LSB |
+
+
+
+data sheet = page no 611.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

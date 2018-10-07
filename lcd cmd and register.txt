@@ -1,0 +1,48 @@
+PIN descriptionn of lcd
+
+
+1.VSS=GND 0V                  |
+2.VDD=GND +5V                 | 10 k
+3.VEE=LCD contrast control pin| 
+
+4.rs= register select pin
+    0= command register
+    1= data register
+5.R/w= read/write select pin
+    0= write lcd
+    1= read busy status of lcd from D7 pin
+6.en= Enable pin= to enable R/w operation
+    = high to low pulse to write on lcd
+7-14=D0-D7= lcd data lines
+15-16=+led,-led.
+*****************************************************************
+LCD command
+0x38=select lcd in 8 bit mode.
+0x02=select lcd in 4 bit mode.
+0x28=select lcd in 4 bit mode.
+
+0x0e=display ON CURSOR ON
+0x06=shift CURSOR to right(default)
+0x01=clear screen
+0x80=set CURSOR position at 1R^1c.
+0xc0= set CURSOR position ar 2R^1c.
+******************************************************************
+                       Register in lcd
+1. DATA register     R(busy status)       W
+                     RS=1                 RS=1
+                     RW=1                 RW=0
+                     EN=1                 EN=1
+                       =0                   =0
+2. Command register
+                     W
+                     RS=0
+                     RW=0
+                     EN=1
+                       =0
+
+
+
+
+
+
+

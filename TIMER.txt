@@ -1,0 +1,190 @@
+                                                              TIMER
+AVR has three timers;
+Two external and one inernal
+
+
+                                                           TIMER
+        
+                 
+                                        1.T0=8bit.       2.T1=16 bit     3.T2=8bit(internal)
+
+
+
+Register used in timer programming
+ 
+  
+                    
+                                                      TIMER
+
+
+1.TIMER0                   2.TIMER1                         3.TIMER2
+
+TCNT0                        TCNT1H & TCNT1L                  TCNT2
+                                                               
+TCCRO                        TCCR1A & TCCR1B                  TCCR2
+
+OCRO                         OCR1A  & OCRB                    OCR2
+
+TIFR                         TIFR                             TIFR
+
+
+
+
+********************************************************************************************************************
+
+
+TIMER   1 Timer as a counter to count external evants.
+        2 timer as wave generater.
+        3 timer as PWM.
+        4 timer as timer to produced delay.
+        5 timer as CTC mode programming
+
+
+
+
+*********************************************************************************************************************
+
+
+
+
+
+                                       TIMER0 PROGRAMMING
+
+
+
+TCNT0 = timer counter register 0.
+
+TCCR0 = timer counter control register 0.
+
+OCR0  = output compare register 0.
+
+TIFR  = timer interrupt flag register 0.
+
+
+
+************************************************************************************************************************
+
+
+
+
+
+
+
+
+ TIMER COUNTER CONTROL REGISTER
+
+TCCRO Register = FOCO | WGM00 | COM01 | COM00 | WGM01 | CS02 |CS01 | CS00 |
+
+
+
+
+FOCO =Force compare match.programming used in waveform generation bit
+      writing 1 to it cause the wave generator to acat as if a compare match had occured.
+
+
+WGM00 , WGM01 = Waveform generation mode select bit 
+
+
+                   WGM00       WGM01         MODE
+   
+                     0            0           NORMAL mode (as timer only)
+                     0            1           CTC mode (clear time on compare)
+                     1            0           PWM (Phase correct)
+                     1            1           PWM (fast)
+
+
+CTC MODE = WGM00 , WGM01 = 0 1
+
+                  COM01       COM00       Operation
+                     0            0        Normal port operation , oco disconnected
+                     0            1        Toggle OCO on compare match
+                     1            0        clear oco on compare match.
+                     1            1        set oco on compare match.        
+
+
+
+
+
+
+FAST PWM = WGM00 , WGM01 = 1 1
+
+                   
+
+                  COM01       COM00       Operation
+                     0            0        Normal port operation , oco disconnected
+                     0            1        reserved
+                     1            0        clear oco on compare match,set oco at bottom (NON inverting) mode.
+                     1            1        set oco on compare match.
+                                           clear oco at bottom (inverting mode)
+
+
+
+Phase correct PWM Mode = WGM00 , WGM01 = 1 0
+
+
+
+
+                  COM01       COM00       Operation
+                     0            0        Normal port operation , oco disconnected
+                     0            1        reserved
+                     1            0        clear oco on compare match,when up- cunting set oco on compare match when down counting
+                     1            1        set oco on compare match.
+                                           when up-counting clear oco on compare match when down counting
+
+
+
+CS02 , CS01 CS00 = Prescale select bit 
+
+
+                    CS02     CS01    CS00        prescale value
+         
+                      0        0       0         NO prescale souce (timer counter stopped)
+
+                      0        0       1         clock (NO prescaling)
+
+                      0        1       0         clock/8
+
+                      0        1       1         clock/64
+
+                      1        0       0         clock/256
+
+                      1        0       1         clock/1024
+   
+                      1        1       0         External clock source on TO pin increment on faling edge.
+                    
+                      1        1       1         External clock source on TO pin on rising edge.
+
+        
+******************************************************************************************************************************
+                  
+
+TIFR = timer interrupt flag register 
+
+
+ 
+TIFR = OCF2 | TOV2 | ICF1 | OCF1A | OCF1B | TOV1 | OCF0 | TOV0 |
+
+
+
+TOV0 = timer0 overflow flag bit
+       0 did not overflow 
+       1 has overflowed(going from $FF tO $00)
+
+OCF0 = timer0 output compare flag bit
+       0 compare match did not occur
+       1 compare match has occured
+
+TOV1 = timer1 overflow flag bit
+
+OCF1A = timer1 output compare A match flag bit 
+  
+OCF1B = timer1 output compare B match flag bit
+
+ICF1 = input capture  flag
+
+TOV2 = timer2 overflow flag
+
+OCF2 = Timer2 output compare match flag      
+
+**********************************************************************************************************************************8
+

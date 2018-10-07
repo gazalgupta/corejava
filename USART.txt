@@ -1,0 +1,212 @@
+USART (Universal synchronous Asynchronous Reciver Transmission)
+  
+                       communication
+            
+                  1.Analog          2.Digital
+
+
+
+
+                        communication
+ 
+                  1.Simplex    2.half duplex    3.full duplax
+
+
+
+                        communication
+  
+
+                  1.Asynchronous           2.Synchronous
+
+
+
+                        communication
+
+                   1.parallel               2.serial
+
+********************************************************************************************************************************************
+
+RS232 Protocol (Recommended standerd 232)
+
+
+This protocol is developed by E.I.A i.e electronics industry association to communicate IBM Pc with another device 
+for example microcontroller.
+
+
+DB9 connector
+-3v to -12v=1
++3v to +12v=0
+-3v to +3v= not define
+
+
+
+
+HAND SHAKING SIGNALS
+RTS= request to send
+CTS= Clear to send
+DSR= Data set ready
+Dtr= data terminal ready
+DCD= data carrier detected
+RI= ring indicator
+
+
+
+
+MAX 232 IC used for interfacing with computer
+
+
+
+Data framing by USART
+
+
+
+
+Programming Baud rate (data rate)
+
+BAUD RATE: baud rate is define as no of symbol transmitted per second.
+no. of singnals state change per second
+
+
+BIT RATE
+No.of bit transmitted per second
+
+
+
+Relation between bit rate and baud rate
+
+   bit rate = N x Baud rate
+      N     = No of bits/symbol
+both have same unit BPS(bit per second)
+
+IBM pc supports following data rates
+150 bps, 300bps,600bps,1200bps,2400bps,4800bps,9600bps,19200bps,38400bps
+
+baud rate = Fcpu/16(x+1)
+
+
+
+value of x calculated by using this formula
+
+it stored in UBRR resigister to achive the desired baud rate
+
+
+UBRR - universal baud rate register it is 16 bit register and used to decide baud rate of communication
+            UBRRH   UBRRL
+if x<=255(ff)
+
+
+
+QUE..
+Calculate the value of x to transfer the data at the baud of 9600 if Fcpu is 8 MHz
+
+
+x=?
+
+
+BURRL=
+
+**************************************************************************************************************************************
+Register used in USART
+1. UDR = USART Data Register
+2. UBRR = USART Baud Rate Register
+3. UCSRA = USART control and status register A
+4. UCSRB = USART control and status register B
+5. UCSRC = USART control and status register C
+          registerss used inernally by USART
+6.TSR = Transmit shift register
+7.RSR = recive shift register
+
+
+
+
+****************************************************************************************************************************************
+
+
+UCSRA = RXC | TXC | UDRE | FE | DOR | PE | U2X | MPCM
+         0     0     1      0    0     0    0     0    reset value
+
+
+RXC = recive complete interrupt flag bit 
+     0 = reception of bite(bits) in UDR is continous
+     1 = UDR  is full user i.e CPU can read data from UDR
+ 
+
+TXC = transmit complete interrupt flag bit 
+     0  = transmission of bite is continue formm TSR to channel
+     1  = TSR is empity USART is ready to frame new byte in TSR
+
+UDRE = USART data register Empity intrrupt flag bit
+     0 = transmission of data is continue from UDR to TSR
+     1 = UDR is empity user can write the next byte in udr.
+UX2 = double the baud rate
+
+     0  =  naurmal baud rate
+     1  =  BR X 2
+
+MPCM = multiprocesser communication MOde
+
+
+**************************************************************************************************************************************
+
+UCSRB =  RXCIE | TXCIF | UDRIE | RXEN | TXEN | UCSZ2 | RXB8 | TXB8
+           0      0       0       0      0       0      0      0
+         -----------------------                       -----------
+               interrupt                    Use in a bit commmunication
+
+                        UCSZ2 USART char.. select size bit
+
+
+ UCSRC =  URSEL | UMSEL | UPM1 | UPM0 | USBS | UCSZ1 | UCSZ0 | UCPOL
+            1       0      0      0      0      1       1       0
+
+
+    URSEL = USART register select bit 
+        1 = to select bits of UCSRRC & UBRR register
+
+   
+
+    UMSEL = USART mode select bit 
+           0   =   for asynchronous
+           1 =  synchronous
+
+
+      UPM1, UPM0 = USART parity modde select bits 
+
+
+     UPM1    UPM0    PARITY
+       0       0      X
+       0       1      X
+       1       0     EVEN
+       1       1      ODD
+
+
+USBS =  USART stop bit select 
+      0   = 1 stop bit
+      1  =  2 stop bit
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+UCSZ2, UCSZ1 , UCSZ0 = USART char..size select bits
+
+
+    UCSZ2     UCSZ1    UCSZ0      CHAR SIZE
+     
+     0          0        0            5
+     0          0        1            6 
+     0          1        0            7
+     0          1        1            8 BIT
+     1          0         0            X
+     1          0        1             X
+     1          1        0             X
+     1          1         1            9

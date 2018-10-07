@@ -1,0 +1,183 @@
+                        
+
+
+                                      ADC  (Analog to digital conversion)
+                                   _________________________________________
+
+
+
+  .Analog and digital converter among the most widely used device for data aquisition.
+
+
+
+
+      ANALOG                  SIGNAL          DIGITAL
+                ----- SENSOR ---------- ADC-----------CPU------O/P
+     QUANTITY               CONDITIONING      DATA
+                            
+
+
+
+**************************************************************************************************************************
+
+                                          TERMS ASSOCIATED WITH ADC
+                                          ___________________________
+
+1.Resolution :- it is defined as no of binary bits available after A to D conversion.
+ 
+              Atmega 8/16/32 has 10 bit ADC resolution.
+
+
+2.No.of steps:-  2^n where n is resolution of ADC.
+               
+                 for n bit ADC no of steps = 2^n.
+                 for 10 bit ADC no. of steps = 2^10=1024.
+ for higher resolution ADCs provide smaller step size, where step size is smallest
+change that cna be discerned by an ADC.
+
+
+      resoluton vs step size  (Vref = 5 v)
+     ___________________________
+ n bit     Number of steps     step size(mv)
+
+  8           256                 5/256=19.53
+ 10          1024                 5/1024=4.88
+ 12          4096                 5/4096=1.2
+ 16         65536                 5/65536=0.076
+
+
+  3.Vrefrence:- Atmega 16 has 3 Vref Options
+    1. 2.56v internal.
+    2. AVCC Pin 30. (+5v).
+    3. Aref (variable at pin 32).
+
+
+4. step size = Vref/2^n = Vref/no.of steps.
+  
+      for 10 bit ADC, if Vref = 5v
+   step size = 5v /1024 = 4.88mv  (quantization step)
+
+
+
+5. Conversion Time:- time to convert an analog signal into digital is called as conversion.
+
+
+6. Digital data output  :- Dout = Vin/step size.
+
+
+
+    Example :- For a 10 bit ADC Dout = ?
+ if vin = 1.7 v, Vref = 2.56 v
+
+        2.56/1024 =0.0025 step size.
+ 
+ Dout = 1.7 / 0.0025   = 680               |1|0|1|0|1|0|1|0|0|0|     
+
+
+***********************************************************************************************************************
+
+       
+
+                  Register used in A D C programming
+
+
+
+ADMUX = register A to D MUX register
+
+ADCSRA = register A To D control are status register
+ 
+ADC  register (result storage register)  >>> |ADCH|ADCL|
+                                             ___________
+                                               16 bit
+
+*********************************************************************************************
+                                        
+ 
+
+
+ADMUX register
+             
+ 
+  ADMUX = REFS1 | REFS0 | ADLAR | MUX4 | MUX3 | MUX2 | MUX1 | MUX0
+
+           REFS1 , REFS0 = refrence voltage selection bit
+  
+
+ REFS1     REFS0     Vref
+  
+     0         0     Aref pin
+     0         1     AVCC pin
+     1         0     reserved
+     1         1     Internal 2.56 v
+
+
+
+ADLAR bit operation (ADC)
+
+
+
+                   ADCH                               ADCL
+
+ADLAR = 1 = D9 | D8 | D7 | D6 | D5 | D3 | D2      | D1 | D0 | Unused           left adjust
+ 
+ADLAR = 0 =   unused   D9 | D8                    | D7 | D6 | D5 | D3 | D2 | D1 | D0 |     right adjust.
+
+
+
+
+ADCH : ADCL Register
+
+After the A/D conversion is complete, the result sit in register ADCL (A/D result low byte) and ADCH (A/d result high byte).
+
+
+****************************************************************************************************************************
+
+
+ADCSRA Register
+
+  ADCSRA = ADEN | ADSC | ADATE | ADIF | ADIE | ADPS2 | ADPS1 | ADPS0 |
+
+ ADEN = A TO D enable
+    1 = to enable ADC.
+    0 = to disable ADC.
+
+ADSC = A2D Start conversion bit
+   1 = start conversion bit. ---
+   0 = stop conversion bit.
+
+ADATE = A2d auto trigger enable.
+
+ADIF = ADC interrupt flag.
+   0 = conversion is continue ---
+   1 = conversion is finished ADC has 10 bit result.
+       this bit is set when an adc conversison completes and the data register are updated.
+
+ADIE = A2D interrupt enable
+   1 =  enable the ADC conversion complete interrupt.
+
+
+
+ADPS2        ADPS1       ADPS0       ADC Clock
+
+    0            0           0       reserved
+
+    0            0           1        clock/2
+    
+    0            1           0        clock/4
+
+    0            1           1        clcok/8
+
+    1            0           0        clock/16
+
+    1            0           1        clock/32
+                               
+    1            1           0        clcok/64
+                                   
+    1            1           1        clock/128
+
+
+
+     
+
+
+

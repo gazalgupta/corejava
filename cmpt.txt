@@ -1,0 +1,54 @@
+
+
+
+   ITEMS                                                               Quantity
+
+
+ 
+1. AC Wire                                                        20 m                                                                                  
+
+2. L293D module                                                   10 pice
+
+3. AVR Board                                                      5 pice one type +5 pice second type
+
+4. RELAY MODULE                                                   10 pice
+
+5. MOC3021 TRAIC Driver                                           5 pice
+
+8. MCT2E Optocoupler                                              5 pice
+
+9. USB Port Female                                                5 pice
+
+10. DC generater 12v to 24v					  2 pice
+
+11. Smoke senssor                                                 5 pice
+
+13. led                                                           5 mm 4 packet
+
+14. BUZZER                                                        20 pice
+
+15. wire cutter                                                   2 pice
+
+16. Screw Driver (slotted)                                        5 pice
+
+17. Resberry pi3                                                  10 pice
+
+18. USB cable Type c                                              10 pice
+
+19. Heat sink (resberry IC)                                       13 pice
+
+20. SD card (class 10) 16 GB                                      10
+
+21. USB camera                                                    2 pice
+
+22. py camera                                                     2 pice
+
+23  Resberry pi WIFI module.                                      2 pice
+
+24. HDMI to VGI connect                                           10 pice
+
+25. Double sided tape                                             3 pice
+
+26. Normal tape                                                   3 pice
+
+27. wax (souldring)                                               1 pice

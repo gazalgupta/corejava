@@ -1,0 +1,199 @@
+                                  AVR Interrupts
+
+
+SREG  =  I | T | H | S | B | N | Z | C |
+
+
+
+C = Carry flag.
+Z = zero flag.
+N = negative flag.
+V = overflow flag.
+S = sing flag.
+H = half carry.
+T = bit copy storage.
+I = global interrupt enable.
+
+
+
+**************************************************************************************************************************
+
+
+Steps in enabling interrupt
+
+ .To enable any one of the interrupt, we take the following steps.
+
+
+1. bit D7 (I) of the SREG register must be set to high to allow the interrupt to happen.
+   this is done with the "SEI"(set interrupt) instruction.
+
+2. If I =1, each interrupt is enabled by setting to high the interrupt enable (IE) flag bit for that interrupt.
+   there are some I/o registers holding the interrupt enable bits 
+
+   TIMSK register has interrupt enable bits for timer 0 , timer 1 , timer 2
+
+
+   IF I = 0 , no interrupt will be responded to , even if the corrosponding interrupt enable bit is high.
+
+
+**************************************************************************************************************************
+SREG REGISTER (status register)
+
+SREG  =  I | T | H | S | B | N | Z | C |
+   
+  I = globle interrupt enable bit
+  1 = enable bit.
+
+   => to enable globle interrupt write following function 
+      sei();
+   => to disable globle interrupt write following function
+      cli();
+
+**************************************************************************************************************************
+
+Define ISR in AVR microcontroler
+Studio compiler
+
+
+ISR (Interrupt <keyword>)
+  {
+            task;
+           
+   } 
+
+
+
+***************************************************************************************************************************
+INTERRUPT                                                           vector name in win AVR
+
+1.External interrupt request 0                                Int0_vect
+2.External interrupt request 1                                Int1_vect
+  3.External interrupt request 2                                Int2_vect
+4.USART,recived complet                                       USART_RXCvect
+5.USART,data register empity                                  USART_UDRE_vect
+6.USART,transmit complet                                      USART_TXCvect
+************************************************************************************************************************
+
+
+
+
+
+
+PROGRAMING OF EXTERNAL HARDWARE INTERRUPTS
+
+  the number of external hardware interrupts varies in differents avr's the atmega 32 has three external hardware interupts
+  PIN-PD2 (PORTD.2) 
+  PIN-PD3 (PORTD.3)
+  PIN-PB2 (PORTB.2)  Designeted as INT0,INT1,INT2.
+
+
+
+
+there are three external hardware interrupts in the atmega32 INT0,INT1,INT2.
+
+these interrupts are enable by using INTx bit located in the GICR register.
+****************************************************************************************************************************
+
+REGISTER GICR  (General Interrupt Control register)
+
+
+GICR = INT1 | INT0 | INT2 | - | - | - | IVSEL | IVCE |
+
+       INT0 = External interrupt request 0 Enable.
+    
+            = 0 Disables external interrupt 0.
+            = 1 enables external interrupts 0.
+     
+       INT1 = External interrupt request 1 Enable.
+    
+            = 0 Disables external interrupt 1.
+            = 1 enables external interrupts 1.
+
+
+
+       INT2 = External interrupt request 2 Enable.
+    
+            = 0 Disables external interrupt 2.
+            = 1 enables external interrupts 2.
+
+   These bits along with the I bit , must be high for an interrupt to be responded to.
+
+***********************************************************************************************************************
+MCUCR register (MCU control register)
+
+
+  MCUCR = SE | SM2 | SM1 | SM0 | ISC11 | ISC10 | ISC01 | ISC00 |
+
+ICS01, ISC00 ( interrupt sence control bits ) these define the lavel or edge on the external INT0 Pin that activate the
+interrupt as shown in the following table.
+
+
+ISC01     ISC00                DESCRIPTION
+ 
+0          0                      The low level of INT0 gengerate a interrupt request
+0          1                      any logical change on INT0 gengerats an interrupt request
+1          0                      the falling edge of INT0 generates an interrupt request
+1          1                      the rising edge of INT0 generates an interrupt request
+    
+
+
+**************************************************************************************************************************
+
+ISC11, ISC10 these bits define the level or  edge thata activates int one pin
+
+
+
+ISC11     ISC10              DISCRIPTION
+
+ 
+0          0                      The low level of INT1 gengerate a interrupt request
+0          1                      any logical change on INT1 gengerats an interrupt request
+1          0                      the falling edge of INT1 generates an interrupt request
+1          1                      the rising edge of INT1 generates an interrupt request
+    
+**************************************************************************************************************************
+
+
+MCUCSR register (MCU control and status register)
+
+there are two type of activation for the external hardware interrupts
+1. level trigered and edge triggred.
+  INT2 is only edge triggred while IN0 and INT1 can be level or edge triggered.
+  as stated , upon reset IN0 and IN1 are low level triggered interrupts.
+  the bits of the MCUCR register indicate the triggered option of INT0 and INT1.
+
+
+
+MCUCSR  = JTD | ISC2 | - | JTRF | EDRF | BORF | EXTRF | PORF |
+
+
+      ISC2 = this bit defines whether the INT2 interrupts activate on the falling or the rising edge
+
+
+
+      ISC2                                      description
+
+      0                                the faling edge of INT2 generate an interrupt request
+      1                                the rising edge of INT2 generate an interrupt request
+
+
+
+
+
+********************************************************************************************************
+
+
+
+
+Enabling and disabling interrupt
+
+upon reset, all interrupt are disable(mask),meaning that none will be responded to by the microcontroller if they are activated.
+the interrupt must be enabled(unmasked)by software in order for the microcontroller to respond to them.
+
+
+The D7 bit of the SREG (status register) is responsable for enabling and disabling the interrupt gloablly.
+
+
+The I bit makes the job of disabling all the interrupts easey.with a single instruction "CLI"(Clear interrupt), we can make
+
+      I=0 during the operation of a critical task.

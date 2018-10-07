@@ -1,0 +1,212 @@
+   
+
+                                       I^2C / I2C / IIC / TWI  (IN AVR)
+
+
+                                     Inter Integrated chip communication
+
+TWI = Two wire interface
+
+
+. In mobile phone only one wire is used for transmit the data from RAM memory by the use of I2C.
+
+. DS1307 real time clock use to serve the time in phone , lithium battery is connected with this IC's. 
+
+. Accelerometer in the mobile which has unique address which has register when the  mobile tilt then the value change. 
+
+
+In avr microcontroller I2c is called as TWI i.e two wire interface.
+
+
+. Each I2C device has a unique present ID(Address).
+
+. I2C support master , slave , multimaster mode of communication.
+
+. The one which start communication and stop communication is called as master , and can be operated in four modes.
+
+1. M-Tx.
+2. M-Rx.
+3. S-Rx.
+4. S-Tx.
+
+. Half-duplex communication.
+
+. Synchronous protocol because each device has same clock.
+. SCL frequency must satisfiy the following question.
+  100khz<fscl<400khz
+  100kbps<=speed<=400kbps.
+
+. Each device in the bus are active low devices so we need a pull up resistance on the bus resistance value depends on the
+  speed of data transfer.
+
+. I2C supports multimaster arbitration.
+. I2C based microcontrollers can be interfaced with two kind of I2C devices.
+. memory based for ex. EEPROM.
+. NoN memory based for ex. EXPANDER.
+
+
+***************************************************************************************************************
+START AND STOP CONDITION (BY MASTER)
+
+   start condition                                                   stop condition
+       _                                                                    _
+SDA =>  |_                                                         SDA => _|
+       
+
+       _________                                                      ___________
+master|   SDA   |__________________________________________________  | SDA    	 |
+      |  	| _					          _  |           |
+      |         |  |_  start        		stop 	        _|   |           |
+      |    	|                                                    |           |
+      | 	|                                                    |           |
+      |	  SCL  	|__________________________________________________  | SCL       |
+      |_________|                                                    |___________|
+
+
+. The bus is active high are the divice are active low when the value is give 0 on the bus
+  then the device is selected.
+*****************************************************************************************************************
+
+REGISTER USED IN I2C PROGRAMING
+
+
+
+TWAR = Two wire address register.
+
+TWDR = Two wire data register.
+
+TWSR = Two wire status register.
+
+TWBR = Two wire bit register.
+
+TWCR = Two wire control register.
+
+****************************************************************************************************************
+
+TWBR register
+
+this register is used to set the bit rate of I2C communication i.e frequency of SCL clock line 
+
+
+                     Fscl =   Fcpu
+                            ________
+                             16 + 2 (TWBR) X 4^TWPS
+
+
+            TWPS = TWO wire Prescale value
+
+****************************************************************************************************************
+
+
+TWSR Register
+
+TWSR = TWS7 | TWS6 | TWS5 | TWS4 | TWS3 | - | TWSPS1 | TWSPS0 | 
+        1     1       1      1      1     0     0       0   
+        -----------------------------     ---------------
+                  Status bit or
+                acknowledgement bit            prescale bit
+
+
+
+
+  TWPS1       TWPS0                 TWPS (Pre scale value)
+
+   0            0                     1
+   0            1                     4
+   1            0                     16
+   1            1                     64
+
+
+**************************************************************************************************************
+
+
+
+suppose we want to transmit data at a speed of 100kbps/100khz what should be the value of TWBR if Fcpu = 8 Mhz
+if required use prescale
+
+
+
+         Fscl = Fcpu
+               ______
+              16 + 2 (TWBR)x 4^ TWsp
+
+
+
+*****************************************************************************************************************
+
+
+TWCR Register 
+
+
+TWCR = TWINT1 | TWEA | TWSTA | TWSTO | TWWC | TWEN | - | TWIE |
+
+
+TWINT = Two wire interrupt flag bit.
+      0 = bus busy , some operation on bus is continous 
+      1 = bus is free , we can perform any operation on the bus ex. start , stop etc
+
+
+TWEA = two wire enable acknowledgement bit 
+     0 = disable acknowledgement functionality
+     1 = Enable ACk functionality
+
+TWSAt = Two wire start condition
+      = 1 write start condition
+        SDA _
+             |_
+             _   
+        SCL | |_|
+
+
+
+TWSTO = Two wire stop contion
+      1 = write stop conditon
+            _
+     SDA  _|
+  
+
+TWWC = two wire weak collisson flag bit 
+
+
+TWEN = two wire enable bit
+   1 = Enable I2C
+   0 = disable I2C          
+
+
+
+*********************************************************************************************************************
+
+
+
+TWDR register
+
+ page no 641
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     

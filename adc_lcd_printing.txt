@@ -1,0 +1,122 @@
+/*
+ * adclcd.c
+ *
+ * Created: 2/24/2018 11:07:23 AM
+ *  Author: Shariq
+ */ 
+
+#define F_CPU 8000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+int x;
+#define rs 0
+#define rw 1
+#define en 2
+void init_lcd();
+void adc_init();
+//void convert_A2D();
+void convert();
+void lcdcmnd(char);
+void lcddata(char);
+void lcdcmdbreak(char);
+void lcddatabreak(char);
+void number(unsigned int);
+int main(void)
+{
+//  adc_init();
+	init_lcd();
+	//number(1234);
+	ADCSRA=0x87;
+	
+	
+    while(1)
+    {
+		lcdcmdbreak(0xC0);
+       ADCSRA|=(1<<ADSC);
+		while((ADCSRA&(1<<ADIF))==0){}
+		number(ADC);
+		ADCSRA|=1<<ADIF;
+		
+		
+    }
+	return 0;
+}
+
+void adc_init()
+{
+	//DDRD=0xff;
+	ADCSRA=0x87;
+	ADMUX=0xc0;
+}
+void convert(int a)                                     //253
+{
+	int i,a1;
+	char pos=0xc3;
+	for (i=0;i<=3;i++)
+	{
+		lcdcmdbreak(pos);
+		a1=a%10;                                  //3//5//2/0
+		a=a/10;                                  //25/2/0
+		lcddatabreak(a1+48);                    //(strat from 48(0)in ascii)addition result of a1
+		pos--;
+	}
+}
+
+void init_lcd()
+{
+	DDRD=0xff;
+	lcdcmdbreak(0x02);
+	lcdcmdbreak(0x0e);
+	lcdcmdbreak(0x28);
+	lcdcmdbreak(0x80);
+	lcdcmdbreak(0x06);
+}
+
+
+void lcdcmnd(char x)
+{
+	PORTD=x;
+	PORTD=PORTD&~(1<<rs);
+	PORTD=PORTD&~(1<<rw);
+	PORTD=PORTD|(1<<en);
+	_delay_ms(1);
+	PORTD=PORTD&~(1<<en);
+	_delay_ms(2);
+}
+
+
+void lcddata(char x)
+{
+   PORTD=x;
+   PORTD=PORTD|(1<<rs);
+   PORTD=PORTD&~(1<<rw);
+   PORTD=PORTD|(1<<en);
+   _delay_ms(1);
+   PORTD=PORTD&~(1<<en);
+   _delay_ms(2);	
+}
+
+void lcdcmdbreak(char x)
+{
+	lcdcmnd(x&0xf0);             //let x is our port
+	lcdcmnd(((x<<4)&0xf0));     //x is start form 4th bit & 0xf0
+}
+void lcddatabreak(char x)
+{
+	lcddata(x&0xf0);
+	lcddata(((x<<4)&0xf0));
+}
+
+void number(unsigned int h){
+	
+	lcddatabreak((h/1000)+48);
+	h%=1000;
+	
+	lcddatabreak((h/100)+48);
+	h%=100;
+	
+	lcddatabreak((h/10)+48);
+	h%=10;
+	
+	lcddatabreak(h+48);
+}
